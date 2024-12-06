@@ -12,10 +12,16 @@ A major challenge in human genetics is determining which noncoding sequences act
 
 Human genome-wide association studies (GWAS) have discovered hundreds of thousands of associations between genetic variants and human diseases or phenotypic traits. A majority of these associations involve non-coding variants that overlap gene regulatory elements, in particular enhancers and promoters. However, it has proven challenging to connect GWAS associations to their causal mechanisms, because we do not fully understand the logic by which our genome encodes for regulatory activity and cell-type specific functions, and how these activities are mediated by regulatory proteins. Therefore, there is a great need for accurate computational models of gene regulation that can be used to interpret the impact of genetic variants on molecular phenotypes and how these translate to disease risk.
 
-To characterize fundamental gene regulatory mechanisms and gain insights into molecular mechanisms by which enhancer or promoter dysregulation contributes to disease risk, we focus on developing computational models to:
+To characterize fundamental gene regulatory mechanisms and gain insights into molecular mechanisms by which enhancer or promoter dysregulation contributes to disease risk, we focus on developing computational tools, predictive models, and experimental assays to:
 
-- Determine which genomic sequences act as enhancers and promoters, which genes they regulate, and in which cell types these activities are present
-- Learn the regulatory grammar of human cell types and how the human genome encodes regulatory activity
-- Characterize the mechanisms that control gene expression variation
+- Determine which genomic sequences act as enhancers or promoters
+- Map enhancer-gene regulatory interactions
+- Determine the cell types in which these activities are present
+- Learn how the human genome encodes regulatory activity
+- Determine the function of regulatory genetic variants
+
+<br>
 
 ![]({{ site.url }}{{ site.baseurl }}/images/respic/vision.jpg){: style="width: 100%; float: center; margin: 0px"}
+
+<br>
