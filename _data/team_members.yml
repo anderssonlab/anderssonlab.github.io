@@ -4,26 +4,44 @@
   url: 
   group: 0
 
-- name: Team member 1
-  photo: bio-photo.jpg
-  info: PhD student
-  url: 
-  group: 1
-
-- name: Team member 2
-  photo: bio-photo.jpg
+- name: Hjörleifur Einarsson
+  photo: hjolli.jpg
   info: Postdoc
   url: 
   group: 1
 
-- name: Team member 3
+- name: Robert Krautz
+  photo: Robert_Krautz_2.jpg
+  info: Postdoc
+  url: 
+  group: 1
+
+- name: Wei-Lin Qiu
+  photo: WeiLin.jpg
+  info: Postdoc
+  url: 
+  group: 1
+
+- name: Marta Greedy Escudero
   photo: bio-photo.jpg
   info: Phd student
   url: 
   group: 1
 
-- name: Team member 4
-  photo: bio-photo.jpg
-  info: Postdoc
+- name: Xuening He
+  photo: Xuening_small.jpg
+  info: Phd student
+  url: 
+  group: 1
+
+- name: Natsuda Navamajiti
+  photo: Natsuda.jpg
+  info: Phd student
+  url: 
+  group: 1
+
+- name: Christian Vaagenso
+  photo: Christian_small.jpg
+  info: Lab technician
   url: 
   group: 1

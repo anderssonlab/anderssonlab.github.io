@@ -25,7 +25,7 @@ Learn more about our [research]({{ site.url }}{{ site.baseurl }}/research) or br
 
 **Team**
 
-![]({{ site.url }}{{ site.baseurl }}/images/teampic/team_2022.jpg){: style="width: 50%; float: left; margin: 10px"} 
+![]({{ site.url }}{{ site.baseurl }}/images/teampic/team_2022.jpg){: style="width: 65%; float: left; margin: 10px"} 
 
 The lab is based in the [Section for Computational and RNA Biology](https://www1.bio.ku.dk/english/research/scarb/), Department of Biology, University of Copenhagen.
 
@@ -33,7 +33,7 @@ We are also affiliated with the [Novo Nordisk Foundation Center for Genomics Mec
 
 Learn more about the [team]({{ site.url }}{{ site.baseurl }}/team).
 
-<br>
+<br><br>
 
 Want to join the team? Excellent postdoc and PhD student candidates interested in gene regulation are encouraged to contact [Robin Andersson](mailto:robin@bio.ku.dk).
 
