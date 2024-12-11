@@ -1,17 +1,17 @@
 - name: Robin Andersson
-  photo: robinandersson.jpg
+  photo: Robin.jpg
   info: Associate professor, Principal Investigator
   url: 
-  group: 0
+  group: 1
 
 - name: Hjörleifur Einarsson
-  photo: hjolli.jpg
+  photo: Hjolli.jpg
   info: Postdoc
   url: 
   group: 1
 
 - name: Robert Krautz
-  photo: Robert_Krautz_2.jpg
+  photo: Robert.jpg
   info: Postdoc
   url: 
   group: 1
@@ -23,13 +23,13 @@
   group: 1
 
 - name: Marta Greedy Escudero
-  photo: bio-photo.jpg
+  photo: placeholder.jpg
   info: Phd student
   url: 
   group: 1
 
 - name: Xuening He
-  photo: Xuening_small.jpg
+  photo: Xuening.jpg
   info: Phd student
   url: 
   group: 1
@@ -41,7 +41,7 @@
   group: 1
 
 - name: Christian Vaagenso
-  photo: Christian_small.jpg
+  photo: Christian.jpg
   info: Lab technician
   url: 
   group: 1
