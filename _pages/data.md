@@ -24,3 +24,9 @@ CAGE data across 108 Epstein-Barr virus (EBV)-transformed lymphoblastoid cell li
 <li>Data: NCBI Gene Expression Omnibus. <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE188131">GSE188131</a></li>
 </ul>
 
+<h3>Enhancer-gene regulatory interactions</h3>
+scE2G predictions of enhancer-gene regulartory interactions across seven 10x multiome datasets: three K562 datasets, GM12878, PBMC, BMMC, and pancreatic islets.
+<ul>
+<li>Paper: Sheth, Qiu, et al. <a href="https://doi.org/10.1101/2024.11.23.624931">Mapping enhancer-gene regulatory interactions from single-cell data</a>. bioRxiv. 2024</li>
+<li>scE2G <a href="https://data.broadinstitute.org/scE2Gpredictions/">predictions</a> (see files named [Dataset]/scE2G/scE2G_multiome.[CellType].predictions.tsv.gz)</li>
+</ul>
