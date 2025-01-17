@@ -2,8 +2,8 @@ repo_description_lines_max: 2
 
 github_repos:
   - anderssonlab/PRIME
-  - EngreitzLab/sc-E2G
   - anderssonlab/PRIMEprep
-  - anderssonlab/ChromTransfer
   - anderssonlab/PRIMEloci
+  - EngreitzLab/sc-E2G
+  - anderssonlab/ChromTransfer
   - anderssonlab/transcriptional_decomposition
