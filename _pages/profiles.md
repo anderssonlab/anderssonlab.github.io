@@ -34,7 +34,7 @@ profiles:
     content: about_natsuda.md
     image_circular: false 
   - align: left
-    image: placeholder.jpg
+    image: Marta.jpg
     content: about_marta.md
     image_circular: false 
   - align: left
