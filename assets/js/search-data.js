@@ -37,6 +37,13 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/publications/";
           },
+        },{id: "nav-contact",
+          title: "Contact",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/contact/";
+          },
         },{id: "news-a-preprint-of-our-sce2g-model-is-out-check-it-out-on-biorxiv",
           title: 'A preprint of our scE2G model is out! Check it out on bioRxiv....',
           description: "",
