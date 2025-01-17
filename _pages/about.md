@@ -27,11 +27,15 @@ Learn more about the [team]({{ site.url }}{{ site.baseurl }}/team).
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-8 mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/team_2022.jpg" %}
+        {% include figure.liquid loading="eager" path="assets/img/team_2022.jpg" class="img-fluid rounded z-depth-1" %}
+    </div>
+    <div class="col-sm-4 mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/team_2023.jpg" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/team_2024.jpg" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
-Andersson lab in 2022.
+Andersson lab 2022-2024.
 </div>
 
 Want to join the team? Excellent postdoc and PhD student candidates interested in gene regulation are encouraged to contact [Robin Andersson](mailto:robin@bio.ku.dk).
