@@ -12,7 +12,7 @@ profiles:
   - align: left
     image: Robin.jpg
     content: about_robin.md
-    image_circular: false # crops the image to make it circular
+    image_circular: false
   - align: left
     image: Robert.jpg
     content: about_robert.md

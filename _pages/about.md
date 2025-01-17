@@ -21,26 +21,29 @@ Learn more about our [research]({{ site.url }}{{ site.baseurl }}/research) or br
 
 <h3>Team</h3>
 
-![]({{ site.url }}{{ site.baseurl }}/images/team_2022.jpg){: style="width: 50%; float: left; margin: 30px"} 
-
-<br>
-
-The lab is based in the [Section for Computational and RNA Biology](https://www1.bio.ku.dk/english/research/scarb/), Department of Biology, University of Copenhagen.
-
-We are also affiliated with the [Novo Nordisk Foundation Center for Genomics Mechanisms of Disease](https://www.broadinstitute.org/nnfc) and the [FANTOM](https://fantom.gsc.riken.jp/) consortium.
+The lab is based in the [Section for Computational and RNA Biology](https://www1.bio.ku.dk/english/research/scarb/), Department of Biology, University of Copenhagen. We are also affiliated with the [Novo Nordisk Foundation Center for Genomics Mechanisms of Disease](https://www.broadinstitute.org/nnfc) and the [FANTOM](https://fantom.gsc.riken.jp/) consortium.
 
 Learn more about the [team]({{ site.url }}{{ site.baseurl }}/team).
 
-Want to join the team? Excellent postdoc and PhD student candidates interested in gene regulation are encouraged to contact [Robin Andersson](mailto:robin@bio.ku.dk).
+<div class="row justify-content-sm-center">
+    <div class="col-sm-8 mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/team_2022.jpg" %}
+    </div>
+</div>
+<div class="caption">
+Andersson lab in 2022.
+</div>
 
-<br>
+Want to join the team? Excellent postdoc and PhD student candidates interested in gene regulation are encouraged to contact [Robin Andersson](mailto:robin@bio.ku.dk).
 
 ---
 
 <h3>Past and present funders</h3>
 
-<figure>
-  <img src="{{ site.url }}{{ site.baseurl }}/images/funders.png" style="width: 600px">
-</figure>
+<div class="row justify-content-sm-center">
+    <div class="col-sm-8 mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/funders.png" %}
+    </div>
+</div>
 
 ---
