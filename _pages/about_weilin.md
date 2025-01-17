@@ -3,6 +3,9 @@
 <div class="social-profile">
 <div class="contact-icons">
 <a href="mailto:weilin.qiu@bio.ku.dk" title="email"><i class="fa-solid fa-envelope"></i></a>
+<a href="https://scholar.google.com/citations?user=17mMs9AAAAAJ" title="Google Scholar"><i class="ai ai-google-scholar"></i></a>
+<a href="http://www.linkedin.com/in/wei-lin-qiu-277633ba" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+<a href="https://bsky.app/profile/613weilin.bsky.social" title="Bluesky"><i class="fa-brands fa-bluesky"></i></a>
 </div>
 </div>
 
