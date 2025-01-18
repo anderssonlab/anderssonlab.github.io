@@ -3,6 +3,8 @@
 <div class="social-profile">
 <div class="contact-icons">
 <a href="mailto:natsuda@bio.ku.dk" title="email"><i class="fa-solid fa-envelope"></i></a>
+<a href="https://scholar.google.com/citations?hl=en&user=qR0GnMgAAAAJ" title="Google Scholar"><i class="ai ai-google-scholar"></i></a>
+<a href="https://www.linkedin.com/in/natsuda-navamajiti" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
 </div>
 </div>
 
