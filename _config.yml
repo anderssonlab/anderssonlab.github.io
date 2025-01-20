@@ -7,7 +7,7 @@ first_name: Andersson
 last_name: Lab
 email: robin@bio.ku.dk
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
-  Andersson Lab @ University of Copenhagen. We develop and apply methods to study gene regulation.
+  Andersson Lab @ University of Copenhagen
 footer_text: >
   Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme.
   Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
