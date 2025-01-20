@@ -47,5 +47,5 @@ Possible projects relate to our [research]({{ site.url }}{{ site.baseurl }}/rese
 <li>Implementing efficient computational methods to identify regulatory elements and their activities based on transciption initiation data</li>
 <li>Developing computational frameworks for assessing regulatory activities and enhancer-gene regulatory interactions in single cells</li>
 <li>Applying computational methods developed in the lab or elsewhere to assess regulatory activities in specific biological systems or to derive atlas-scale data for further analyses</li>
-<li>Developing computational frameworks for variant-to-function analysis based on gene regulatory data</li>
+<li>Developing computational frameworks for variant-to-function analysis</li>
 </ul>
