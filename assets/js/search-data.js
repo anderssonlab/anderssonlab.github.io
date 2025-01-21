@@ -61,4 +61,7 @@ ninja.data = [{
         },{id: "news-a-preprint-of-our-sce2g-model-is-out-check-it-out-on-biorxiv",
           title: 'A preprint of our scE2G model is out! Check it out on bioRxiv....',
           description: "",
+          section: "News",},{id: "news-the-lab-receives-a-novo-nordisk-foundation-project-grant-in-bioscience-and-basic-biomedicine-resolving-gene-regulation-during-differentiation-at-single-cell-resolution",
+          title: 'The lab receives a Novo Nordisk Foundation Project Grant in Bioscience and Basic...',
+          description: "",
           section: "News",},];
