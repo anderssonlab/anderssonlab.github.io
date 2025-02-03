@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Congratulations to Robert Krautz, who receives a (Villum Young Investigator grant)[https://villumfonden.dk/en/news/millions-funding-young-researchers]!
+Congratulations to Robert Krautz, who receives a [Villum Young Investigator grant](https://villumfonden.dk/en/news/millions-funding-young-researchers)!
