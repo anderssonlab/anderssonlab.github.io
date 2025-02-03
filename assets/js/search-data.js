@@ -64,4 +64,7 @@ ninja.data = [{
           section: "News",},{id: "news-the-lab-receives-a-novo-nordisk-foundation-project-grant-in-bioscience-and-basic-biomedicine-resolving-gene-regulation-during-differentiation-at-single-cell-resolution",
           title: 'The lab receives a Novo Nordisk Foundation Project Grant in Bioscience and Basic...',
           description: "",
+          section: "News",},{id: "news-congratulations-to-robert-krautz-who-receives-a-villum-young-investigator-grant-https-villumfonden-dk-en-news-millions-funding-young-researchers",
+          title: 'Congratulations to Robert Krautz, who receives a (Villum Young Investigator grant)[https://villumfonden.dk/en/news/millions-funding-young-researchers]!',
+          description: "",
           section: "News",},];
