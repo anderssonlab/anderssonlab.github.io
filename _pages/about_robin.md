@@ -9,5 +9,4 @@
 </div>
 </div>
 
-Robin Andersson graduated as a Computer Scientist at Linköping University (Sweden, 2004), after which he obtained a PhD in Bioinformatics at Uppsala University (Sweden, 2010). He was a postdoc in the lab of Prof. Albin Sandelin at University of Copenhagen (Denmark), where he mainly focused on transcriptional regulation and enhancer transcription. In 2015, Robin received a European Research Council (ERC) starting grant, which was the starting point of the Andersson lab at the Section for Computational and RNA Biology, Dept. of Biology, University of Copenhagen. In 2020 he became a tenured Associate Professor of Bioinformatics.
-
+Robin Andersson graduated as a Computer Scientist at Linköping University (Sweden, 2004), after which he obtained a PhD in Bioinformatics at Uppsala University (Sweden, 2010). He was a postdoc in the lab of Prof. Albin Sandelin at University of Copenhagen (Denmark), where he mainly focused on transcriptional regulation and enhancer transcription. In 2015, Robin received a European Research Council (ERC) starting grant, which was the starting point of the Andersson lab at the Section for Computational and RNA Biology, Dept. of Biology, University of Copenhagen. In 2020 he became a tenured Associate Professor of Bioinformatics. From 2024, he is the Head of Section for Computational and RNA Biology.
