@@ -26,7 +26,7 @@ horizontal: false
 </ul>
 
 <br>
-<a href="https://kurser.ku.dk/course/nbik10005u/">NBIK10005U</a>, <a href="https://kurser.ku.dk/course/nbik10008u/">NBIK10008U</a>, <a href="https://kurser.ku.dk/course/nbik10009u/">NBIK10009U</a>, <a href="https://kurser.ku.dk/course/nbik100010u/">NBIK100010U</a> - Bioinformatics Project
+<a href="https://kurser.ku.dk/course/nbik10005u/">NBIK10005U</a>, <a href="https://kurser.ku.dk/course/nbik10008u/">NBIK10008U</a>, <a href="https://kurser.ku.dk/course/nbik10009u/">NBIK10009U</a>, <a href="https://kurser.ku.dk/course/nbik10010u/">NBIK10010U</a> - Bioinformatics Project
 <ul>
 <li>For MSc students in Bioinformatics</li>
 <li>Credit: 7,5 ECTS</li>
