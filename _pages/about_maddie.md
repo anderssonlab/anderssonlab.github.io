@@ -6,4 +6,4 @@
 </div>
 </div>
 
-Maddie Murphy holds a Master's degree in Bioinformatics from University of California Los Angeles (UCLA). Her work focus on modelling enhancer activity and enhnacer-to-gene regulatory interactions in single cells.
+Maddie Murphy holds a Master's degree in Bioinformatics from University of California Los Angeles (UCLA). Her work focuses on modelling enhancer activity and enhnacer-to-gene regulatory interactions in single cells.
