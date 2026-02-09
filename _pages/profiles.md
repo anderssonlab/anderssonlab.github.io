@@ -14,20 +14,12 @@ profiles:
     content: about_robin.md
     image_circular: false
   - align: left
-    image: Robert.jpg
-    content: about_robert.md
-    image_circular: false 
-  - align: left
-    image: Hjolli.jpg
-    content: about_hjolli.md
-    image_circular: false 
-  - align: left
-    image: WeiLin.jpg
-    content: about_weilin.md
-    image_circular: false 
-  - align: left
     image: Xuening.jpg
     content: about_xuening.md
+    image_circular: false 
+  - align: left
+    image: Maddie.jpg
+    content: about_maddie.md
     image_circular: false 
   - align: left
     image: Natsuda.jpg

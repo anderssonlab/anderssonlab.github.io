@@ -17,6 +17,16 @@ horizontal: false
 <li>Block: 2</li>
 </ul>
 
+
+<br>
+<a href="https://kurser.ku.dk/course/nbib25001u/">NBIB25001U</a> - Genomics & Transcriptomics
+<ul>
+<li>For BSc students in Bioinformatics</li>
+<li>Credit: 7,5 ECTS</li>
+<li>Block: 2</li>
+</ul>
+
+
 <br>
 <a href="https://kurser.ku.dk/course/nbik20004u/">NBIK20004U</a> - Advanced Bioinformatics for Next-Generation Sequencing
 <ul>
