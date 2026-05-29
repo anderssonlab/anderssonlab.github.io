@@ -90,8 +90,15 @@
             <div class="search-group">
                 <h2>1. Navigate locus</h2>
                 <label>Gene or coordinates</label>
-                <input type="text" id="locusInput" class="search-input" placeholder="e.g., SMAD3" value="SMAD3">
+                <input type="text" id="locusInput" class="search-input" placeholder="e.g., SMAD3" value="chr7:12,685,750-12,691,075">
                 <button class="btn" onclick="searchLocus()">Search browser</button>
+                
+                <label style="margin-top: 1rem;">Gene Annotation Track</label>
+                <select id="geneAnnotationSelect" class="search-input" onchange="changeGeneAnnotation()">
+                    <option value="refseq" selected>RefSeq Genes (All)</option>
+                    <option value="refseq_select">RefSeq Select</option>
+                    <option value="gencode_v47">GENCODE v47</option>
+                </select>
             </div>
 
             <hr style="border: 0; border-top: 1px solid var(--border); margin: 1.5rem 0;">
@@ -175,6 +182,7 @@
         const BASE_URL = "https://os134.hpc.ku.dk/PRIME_atlas";
         let igvBrowser = null;
         
+        // Track states to prevent duplicate loading
         const loadedAgnosticTracks = new Set();
         const loadedFacetTracks = new Set();
 
@@ -183,41 +191,70 @@
         function closeAllModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active')); }
         function closeModal(e) { if(e.target.classList.contains('modal-overlay')) closeAllModals(); }
 
-        // Robust function to safely convert BED feature colors (e.g. "255,0,0" to "rgb(255,0,0)")
-        const getTrackColor = (feature, defaultColor) => {
-            if (feature.color) {
-                // If the color string is raw comma-separated RGB
-                if (typeof feature.color === 'string' && feature.color.includes(',') && !feature.color.startsWith('rgb')) {
-                    return `rgb(${feature.color})`;
-                }
-                return feature.color;
+        // Gene Annotation Track Configurations mapped to hg38_annotations.xml data
+        const geneTracks = {
+            "refseq": {
+                name: "Genes (RefSeq)",
+                type: "annotation",
+                format: "refgene",
+                sourceType: "file",
+                url: "https://s3.amazonaws.com/igv.org.genomes/hg38/ncbiRefSeq.sorted.txt.gz",
+                indexURL: "https://s3.amazonaws.com/igv.org.genomes/hg38/ncbiRefSeq.sorted.txt.gz.tbi",
+                visibilityWindow: -1,
+                displayMode: "EXPANDED"
+            },
+            "refseq_select": {
+                name: "Genes (RefSeq Select)",
+                type: "annotation",
+                format: "refgene",
+                sourceType: "file",
+                url: "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/ncbiRefSeqSelect.txt.gz",
+                visibilityWindow: -1,
+                displayMode: "EXPANDED"
+            },
+            "gencode_v47": {
+                name: "Genes (GENCODE v41)", // Kept matching your UI option string name
+                type: "annotation",
+                format: "bigbed",
+                url: "https://hgdownload.soe.ucsc.edu/gbdb/hg38/gencode/gencodeV47.bb",
+                visibilityWindow: -1,
+                displayMode: "EXPANDED"
             }
-            return defaultColor;
         };
+
+        const defaultK562Bed = `${BASE_URL}/PRIME_cellLines/PRIME_K562_N_0.75.bed.gz`;
+        const defaultK562Plus = `${BASE_URL}/PRIME_cellLines_TPM_bw/K562_N.TPM.plus.bw`;
+        const defaultK562Minus = `${BASE_URL}/PRIME_cellLines_TPM_bw/K562_N.TPM.minus.bw`;
 
         const igvOptions = {
             genome: "hg38",
-            locus: "SMAD3",
+            chromosomes: [
+                "chr1", "chr2", "chr3", "chr4", "chr5", "chr6", "chr7", "chr8", "chr9", 
+                "chr10", "chr11", "chr12", "chr13", "chr14", "chr15", "chr16", "chr17", 
+                "chr18", "chr19", "chr20", "chr21", "chr22", "chrX", "chrY", "chrM"
+            ],
+            locus: "chr7:12685750-12691075", // Default viewport locus focus
+            cytobandURL: "https://s3.amazonaws.com/igv.org.genomes/hg38/annotations/cytoBandIdeo.txt.gz",
             tracks: [
+                geneTracks["refseq"],
                 {
-                    name: "Genes (RefSeq)",
-                    type: "annotation",
-                    format: "refgene",
-                    sourceType: "file",
-                    url: "https://s3.amazonaws.com/igv.org.genomes/hg38/ncbiRefSeq.sorted.txt.gz",
-                    indexURL: "https://s3.amazonaws.com/igv.org.genomes/hg38/ncbiRefSeq.sorted.txt.gz.tbi",
-                    visibilityWindow: -1,
-                    displayMode: "EXPANDED"
-                },
-                {
-                    name: "Agnostic FANTOM5 PRIME CREs (distal 0.75)",
+                    name: "K562 (Nuclei, 0.75) (All CREs)",
                     type: "annotation",
                     format: "bed",
-                    url: `${BASE_URL}/PRIME_FANTOM5_agnostic/PRIME_FANTOM5_agnostic_distal_0.75.bed.gz`,
-                    indexURL: `${BASE_URL}/PRIME_FANTOM5_agnostic/PRIME_FANTOM5_agnostic_distal_0.75.bed.gz.tbi`,
+                    url: defaultK562Bed,
+                    indexURL: `${defaultK562Bed}.tbi`,
                     displayMode: "EXPANDED",
-                    itemRGB: true, // Forces IGV to parse the 9th column (itemRgb) bypassing the missing header
-                    color: "#1e293b"
+                    itemRgb: true // Command igv.js to process color score indices
+                },
+                {
+                    name: "K562 (Nuclei, 0.75) Signal (+)",
+                    type: "wig", format: "bigwig",
+                    url: defaultK562Plus, color: "#2563eb"
+                },
+                {
+                    name: "K562 (Nuclei, 0.75) Signal (-)",
+                    type: "wig", format: "bigwig",
+                    url: defaultK562Minus, color: "#e11d48"
                 }
             ]
         };
@@ -305,12 +342,14 @@
             const igvDiv = document.getElementById("igv-container");
             const checkboxList = document.getElementById("facetCheckboxes");
             
-            loadedAgnosticTracks.add("distal_0.75");
+            // Register active state flags for the custom default initialization layout
+            loadedFacetTracks.add("K562 (Nuclei, 0.75)");
 
             cellLinesMap.forEach(c => {
                 const label = document.createElement('label');
                 label.className = 'facet-checkbox-item';
-                label.innerHTML = `<input type="checkbox" value="${c.label}"> <span>${c.label}</span>`;
+                const isDefault = c.label === "K562 (Nuclei, 0.75)";
+                label.innerHTML = `<input type="checkbox" value="${c.label}" ${isDefault ? 'checked disabled' : ''}> <span style="${isDefault ? 'opacity:0.5;' : ''}" title="${isDefault ? 'Track is already loaded.' : ''}">${c.label}</span>`;
                 checkboxList.appendChild(label);
             });
 
@@ -330,6 +369,21 @@
                     igvDiv.innerHTML = `<div style="padding: 2rem; color: red;"><strong>Error loading IGV browser:</strong> ${error.message}</div>`;
                 });
         });
+
+        // Intercept change event hooks to swap active gene model assemblies smoothly
+        async function changeGeneAnnotation() {
+            if (!igvBrowser) return;
+            const selected = document.getElementById("geneAnnotationSelect").value;
+            
+            const currentTracks = igvBrowser.findTracks();
+            currentTracks.forEach(track => {
+                if (track.name && track.name.startsWith("Genes (")) {
+                    igvBrowser.removeTrack(track);
+                }
+            });
+
+            await igvBrowser.loadTrack(geneTracks[selected]);
+        }
 
         function filterFacets() {
             const term = document.getElementById('facetFilter').value.toLowerCase();
@@ -368,8 +422,7 @@
                     indexURL: `${BASE_URL}/PRIME_FANTOM5_agnostic/PRIME_FANTOM5_agnostic_${suffix}.bed.gz.tbi`,
                     name: `Agnostic FANTOM5 PRIME CREs (${suffix.replace('_', ' ')})`,
                     displayMode: "EXPANDED",
-                    itemRGB: true,
-                    color: "#1e293b"
+                    itemRgb: true
                 });
                 loadedAgnosticTracks.add(suffix);
             } catch(e) {
@@ -418,7 +471,7 @@
                             type: 'annotation', format: 'bed',
                             url: bedDistalUrl, indexURL: `${bedDistalUrl}.tbi`,
                             name: bedDistalName, displayMode: "EXPANDED",
-                            itemRGB: true, color: "#0284c7"
+                            itemRgb: true
                         });
                     } catch(e) { console.error("Error loading BED for", trackName, e); }
                 }
@@ -429,7 +482,7 @@
                             type: 'annotation', format: 'bed',
                             url: bedProximalUrl, indexURL: `${bedProximalUrl}.tbi`,
                             name: `${trackName} (Proximal)`, displayMode: "EXPANDED",
-                            itemRGB: true, color: "#0d9488"
+                            itemRgb: true
                         });
                     } catch(e) { console.error("Error loading proximal BED for", trackName, e); }
                 }
@@ -454,8 +507,10 @@
                 
                 cb.checked = false;
                 cb.disabled = true;
-                cb.parentElement.style.opacity = "0.5";
-                cb.parentElement.title = "Track is already loaded.";
+                if(cb.parentElement && cb.parentElement.querySelector('span')) {
+                    cb.parentElement.querySelector('span').style.opacity = "0.5";
+                    cb.parentElement.querySelector('span').title = "Track is already loaded.";
+                }
                 loadedFacetTracks.add(selection);
             }
         }
@@ -464,7 +519,8 @@
             if (!igvBrowser) return;
             const currentTracks = igvBrowser.findTracks();
             currentTracks.forEach(track => {
-                if (track.name !== "Genes (RefSeq)") {
+                // Keep the structural tracking references, sequence layouts, and ideograms entirely safe
+                if (track.type !== "sequence" && track.type !== "ideogram" && (!track.name || !track.name.startsWith("Genes ("))) {
                     igvBrowser.removeTrack(track);
                 }
             });
@@ -475,8 +531,11 @@
             const checkboxes = document.querySelectorAll('#facetCheckboxes input[type="checkbox"]');
             checkboxes.forEach(cb => {
                 cb.disabled = false;
-                cb.parentElement.style.opacity = "1";
-                cb.parentElement.title = "";
+                cb.checked = false;
+                if(cb.parentElement && cb.parentElement.querySelector('span')) {
+                    cb.parentElement.querySelector('span').style.opacity = "1";
+                    cb.parentElement.querySelector('span').title = "";
+                }
             });
         }
     </script>
