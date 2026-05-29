@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PRIME CRE Atlas | Browser</title>
-    <script src="https://cdn.jsdelivr.net/npm/igv@2.15.5/dist/igv.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/igv@3/dist/igv.min.js"></script>
     <style>
         :root {
             --primary: #0284c7;
@@ -15,65 +16,416 @@
             --text-muted: #64748b;
             --nav-bg: #0f172a;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-page); color: var(--text-main); overflow: hidden; }
-        
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg-page);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
         /* Top Navigation */
-        .navbar { background: var(--nav-bg); color: white; padding: 0 1.5rem; display: flex; justify-content: space-between; align-items: center; height: 60px; }
-        .navbar-brand { font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; }
-        .navbar-brand span { font-size: 0.85rem; font-weight: 400; background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 4px; }
-        .nav-links { display: flex; gap: 1.5rem; }
-        .nav-links button { background: transparent; border: none; color: #cbd5e1; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: color 0.2s; }
-        .nav-links button:hover { color: white; }
+        .sidebar-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.25rem;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+
+        .navbar {
+            background: var(--nav-bg);
+            color: white;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+
+        .navbar-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .navbar-brand span {
+            font-size: 0.85rem;
+            font-weight: 400;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links button {
+            background: transparent;
+            border: none;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .nav-links button:hover {
+            color: white;
+        }
 
         /* Dashboard Layout */
-        .dashboard { display: grid; grid-template-columns: 340px 1fr; height: calc(100vh - 60px); }
-        
-        .sidebar { background: white; border-right: 1px solid var(--border); padding: 1.5rem; overflow-y: auto; }
-        .sidebar h2 { font-size: 1rem; margin-bottom: 0.75rem; color: var(--primary); letter-spacing: 0.05em;}
-        
-        .search-group { margin-bottom: 1.5rem; }
-        .search-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; }
-        .search-input { width: 100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 4px; font-size: 0.9rem; outline: none; }
-        .search-input:focus { border-color: var(--primary); }
-        
-        .btn { width: 100%; background: var(--primary); color: white; border: none; padding: 0.5rem; border-radius: 4px; cursor: pointer; margin-top: 0.5rem; font-weight: 600; transition: background 0.2s;}
-        .btn:hover { background: var(--primary-hover); }
-        .btn-outline { background: white; color: var(--text-main); border: 1px solid var(--border); margin-top: 0.5rem; }
-        .btn-outline:hover { background: #f1f5f9; }
-        .btn-danger { background: white; color: #e11d48; border: 1px solid #e11d48; margin-top: 0.5rem;}
-        .btn-danger:hover { background: #fff1f2; }
+        .dashboard {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            flex: 1;
+        }
 
-        .main-view { padding: 1rem; display: flex; flex-direction: column; overflow-y: auto; background: white; }
-        #igv-container { border: 1px solid var(--border); border-radius: 4px; padding-top: 10px; min-height: 600px; flex-grow: 1; }
-        
+        .sidebar {
+            background: white;
+            border-right: 1px solid var(--border);
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+            letter-spacing: 0.05em;
+        }
+
+        .search-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .search-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            margin-top: 0.5rem;
+        }
+
+        .btn-outline:hover {
+            background: #f1f5f9;
+        }
+
+        .btn-danger {
+            background: white;
+            color: #e11d48;
+            border: 1px solid #e11d48;
+            margin-top: 0.5rem;
+        }
+
+        .btn-danger:hover {
+            background: #fff1f2;
+        }
+
+        .main-view {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background: white;
+        }
+
+        #igv-container {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding-top: 10px;
+            min-height: 600px;
+            flex-grow: 1;
+        }
+
         /* Multi-select Styles */
-        .multi-select-container { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: #fafafa; }
-        .multi-select-search { width: 100%; padding: 0.5rem; border: none; border-bottom: 1px solid var(--border); outline: none; font-size: 0.85rem; }
-        .facet-checkbox-list { max-height: 250px; overflow-y: auto; padding: 0.5rem; }
-        .facet-checkbox-item { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.35rem 0; font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid #f1f5f9; transition: opacity 0.2s;}
-        .facet-checkbox-item:last-child { border-bottom: none; }
-        .facet-checkbox-item input { margin-top: 0.2rem; cursor: pointer; }
+        .multi-select-container {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            background: #fafafa;
+        }
 
-        .download-link { font-size: 0.85rem; color: var(--primary); text-decoration: none; font-weight: 600; display: block; margin-bottom: 0.5rem;}
-        .download-link:hover { text-decoration: underline; }
+        .multi-select-search {
+            width: 100%;
+            padding: 0.5rem;
+            border: none;
+            border-bottom: 1px solid var(--border);
+            outline: none;
+            font-size: 0.85rem;
+        }
+
+        .facet-checkbox-list {
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .facet-checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.15rem 0;
+            line-height: 1.2;
+        }
+
+        .facet-checkbox-item input {
+            margin-top: 0;
+        }
+
+        .facet-checkbox-item:last-child {
+            border-bottom: none;
+        }
+
+        .download-link {
+            font-size: 0.85rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .download-link:hover {
+            text-decoration: underline;
+        }
 
         /* Modal Styles */
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; opacity: 0; transition: opacity 0.2s; }
-        .modal-overlay.active { display: flex; opacity: 1; }
-        .modal { background: white; padding: 2rem; border-radius: 8px; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.1); position: relative;}
-        .modal h3 { font-size: 1.25rem; color: var(--text-main); margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem;}
-        .modal p { font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-main); line-height: 1.6;}
-        .modal a { color: var(--primary); text-decoration: none; }
-        .modal a:hover { text-decoration: underline; }
-        .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: transparent; border: none; font-size: 1.25rem; cursor: pointer; color: var(--text-muted); }
-        .modal-close:hover { color: var(--text-main); }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .modal h3 {
+            font-size: 1.25rem;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .modal p {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        .modal a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .modal a:hover {
+            text-decoration: underline;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: transparent;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .modal-close:hover {
+            color: var(--text-main);
+        }
+
+        .browser-header {
+            margin-bottom: 1rem;
+        }
+
+        .browser-header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.25rem;
+        }
+
+        .browser-header p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        @media (max-width: 1024px) {
+
+            body {
+                overflow: auto;
+            }
+
+            .sidebar-toggle {
+                display: inline-block;
+            }
+
+            .dashboard {
+                display: block;
+                height: auto;
+            }
+
+            .sidebar {
+                display: none;
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 1rem;
+            }
+
+            .sidebar.open {
+                display: block;
+            }
+
+            .main-view {
+                min-height: calc(100vh - 60px);
+            }
+
+            #igv-container {
+                min-height: 500px;
+            }
+
+            .navbar {
+                flex-wrap: wrap;
+                height: auto;
+                padding: 0.75rem;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                margin-top: 0.5rem;
+            }
+        }
+
+        @media (min-width: 1025px) {
+
+            .sidebar {
+                display: block !important;
+            }
+
+            .sidebar-toggle {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .sidebar {
+                padding: 0.75rem;
+            }
+
+            .facet-checkbox-list {
+                max-height: 180px;
+            }
+
+            .navbar-brand {
+                font-size: 1rem;
+            }
+
+            #igv-container {
+                min-height: 450px;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 0.75rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            background: #fafafa;
+        }
     </style>
 </head>
+
 <body>
 
     <nav class="navbar">
         <div class="navbar-brand">
+            <button id="sidebarToggle" class="sidebar-toggle" onclick="toggleSidebar()">
+                ☰
+            </button>
             PRIME CRE Atlas <span>Browser</span>
         </div>
         <div class="nav-links">
@@ -86,13 +438,14 @@
 
     <div class="dashboard">
         <div class="sidebar">
-            
+
             <div class="search-group">
                 <h2>1. Navigate locus</h2>
                 <label>Gene or coordinates</label>
-                <input type="text" id="locusInput" class="search-input" placeholder="e.g., SMAD3" value="chr7:12,685,750-12,691,075">
+                <input type="text" id="locusInput" class="search-input" placeholder="e.g., SMAD3"
+                    value="chr7:12,685,750-12,691,075">
                 <button class="btn" onclick="searchLocus()">Search browser</button>
-                
+
                 <label style="margin-top: 1rem;">Gene Annotation Track</label>
                 <select id="geneAnnotationSelect" class="search-input" onchange="changeGeneAnnotation()">
                     <option value="refseq" selected>RefSeq Genes (All)</option>
@@ -124,18 +477,27 @@
                 <h2>3. Load PRIME CREs and CAGE signal</h2>
                 <label>Select FANTOM5 facets or cell lines</label>
                 <div class="multi-select-container">
-                    <input type="text" id="facetFilter" class="multi-select-search" placeholder="Type to filter..." oninput="filterFacets()">
+                    <input type="text" id="facetFilter" class="multi-select-search" placeholder="Type to filter..."
+                        oninput="filterFacets()">
                     <div class="facet-checkbox-list" id="facetCheckboxes">
-                        </div>
+                    </div>
                 </div>
                 <button class="btn btn-outline" onclick="loadFacetTracks()">Load selected tracks</button>
                 <button class="btn btn-danger" onclick="clearAllTracks()">Clear all tracks</button>
             </div>
-            
-        </div>    
+
+        </div>
 
         <div class="main-view">
+
+            <div class="browser-header">
+                <p>
+                    Interactive browser for transcription initiation-defined
+                    cis-regulatory elements (CREs) identified using PRIME.
+                </p>
+            </div>
             <div id="igv-container"></div>
+
         </div>
     </div>
 
@@ -143,9 +505,13 @@
         <div class="modal" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeAllModals()">×</button>
             <h3>Citation</h3>
-            <p><strong>Mapping active cis-regulatory elements from transcription initiation events</strong></p> 
-            <p>Hjörleifur Einarsson, Natsuda Navamajiti, Christian Skov Vaagensø, Stefano Pellegrini, Nicolas Alcaraz, Malte Thodberg, Daniel A. Solvie, Wei-Lin Qiu, Maya U. Sheth, Marta Greedy Escudero, Bram Gorissen, Marco Salvatore, Bradley E. Bernstein, Albin Sandelin, Jesse M. Engreitz, Robert Krautz, Robin Andersson</p>
-            <p><strong>Preprint:</strong> bioRxiv doi:<a href="https://doi.org/10.64898/2026.05.11.724207" target="_blank">10.64898/2026.05.11.724207</a></p>
+            <p><strong>Mapping active cis-regulatory elements from transcription initiation events</strong></p>
+            <p>Hjörleifur Einarsson, Natsuda Navamajiti, Christian Skov Vaagensø, Stefano Pellegrini, Nicolas Alcaraz,
+                Malte Thodberg, Daniel A. Solvie, Wei-Lin Qiu, Maya U. Sheth, Marta Greedy Escudero, Bram Gorissen,
+                Marco Salvatore, Bradley E. Bernstein, Albin Sandelin, Jesse M. Engreitz, Robert Krautz, Robin Andersson
+            </p>
+            <p><strong>Preprint:</strong> bioRxiv doi:<a href="https://doi.org/10.64898/2026.05.11.724207"
+                    target="_blank">10.64898/2026.05.11.724207</a></p>
         </div>
     </div>
 
@@ -153,9 +519,15 @@
         <div class="modal" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeAllModals()">×</button>
             <h3>Methods</h3>
-            <p>The <a href="https://anderssonlab.org/PRIME/" target="_blank">PRIME toolkit</a> was used to identify active cis-regulatory elements from CAGE data, including a curated set of 760 FANTOM5 CAGE libraries from the <a href="https://fantom.gsc.riken.jp/5/" target="_blank">FANTOM5 project</a>.</p>
-            <p style="margin-bottom: 0.5rem;">New CAGE sequencing data from K562, HepG2, GM12878, A549, HCT116 cells were preprocessed and mapped using the <a href="https://github.com/anderssonlab/PRIMEprep" target="_blank">PRIMEprep pipeline</a> (v0.1.0).</p>
-            <p style="margin-bottom: 0.5rem;">Downstream analyses were performed in R using <a href="https://github.com/anderssonlab/PRIME" target="_blank">PRIME</a> (v0.1.0) and in Python using <a href="https://github.com/anderssonlab/PRIMEmodel" target="_blank">PRIMEmodel</a> (v1.0.0).</p>
+            <p>The <a href="https://anderssonlab.org/PRIME/" target="_blank">PRIME toolkit</a> was used to identify
+                active cis-regulatory elements from CAGE data, including a curated set of 760 FANTOM5 CAGE libraries
+                from the <a href="https://fantom.gsc.riken.jp/5/" target="_blank">FANTOM5 project</a>.</p>
+            <p style="margin-bottom: 0.5rem;">New CAGE sequencing data from K562, HepG2, GM12878, A549, HCT116 cells
+                were preprocessed and mapped using the <a href="https://github.com/anderssonlab/PRIMEprep"
+                    target="_blank">PRIMEprep pipeline</a> (v0.1.0).</p>
+            <p style="margin-bottom: 0.5rem;">Downstream analyses were performed in R using <a
+                    href="https://github.com/anderssonlab/PRIME" target="_blank">PRIME</a> (v0.1.0) and in Python using
+                <a href="https://github.com/anderssonlab/PRIMEmodel" target="_blank">PRIMEmodel</a> (v1.0.0).</p>
         </div>
     </div>
 
@@ -163,8 +535,11 @@
         <div class="modal" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeAllModals()">×</button>
             <h3>Data availability</h3>
-            <p>All PRIME predictions and signal tracks in K562, GM12878, HepG2, HCT116, A549 cells and FANTOM5 facets are available at Zenodo (doi: <a href="https://doi.org/10.5281/zenodo.19712783" target="_blank">10.5281/zenodo.19712783</a>, v0.2.0).</p>
-            <p><a href="https://os134.hpc.ku.dk/PRIME_atlas/PRIME_FANTOM5_agnostic/facet_statistics.tsv" class="download-link" target="_blank">Download facet statistics (.tsv)</a></p>
+            <p>All PRIME predictions and signal tracks in K562, GM12878, HepG2, HCT116, A549 cells and FANTOM5 facets
+                are available at Zenodo (doi: <a href="https://doi.org/10.5281/zenodo.19712783"
+                    target="_blank">10.5281/zenodo.19712783</a>, v0.2.0).</p>
+            <p><a href="https://os134.hpc.ku.dk/PRIME_atlas/PRIME_FANTOM5_agnostic/facet_statistics.tsv"
+                    class="download-link" target="_blank">Download facet statistics (.tsv)</a></p>
         </div>
     </div>
 
@@ -172,16 +547,19 @@
         <div class="modal" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeAllModals()">×</button>
             <h3>Funding</h3>
-            <p>This work was supported by grants from the Novo Nordisk Foundation, the Independent Research Fund Denmark, the Lundbeck Foundation, and the Villum Foundation.</p>
+            <p>This work was supported by grants from the Novo Nordisk Foundation, the Independent Research Fund
+                Denmark, the Lundbeck Foundation, and the Villum Foundation.</p>
             <h3 style="margin-top: 1.5rem;">Contact</h3>
-            <p>For inquiries regarding this work, please contact the PRIME team at the <a href="https://tgrlab.org/" target="_blank">Tissue Gene Regulation Lab</a> and the <a href="https://anderssonlab.org/" target="_blank">Andersson Lab</a>.</p>
+            <p>For inquiries regarding this work, please contact the PRIME team at the <a href="https://tgrlab.org/"
+                    target="_blank">Tissue Gene Regulation Lab</a> and the <a href="https://anderssonlab.org/"
+                    target="_blank">Andersson Lab</a>.</p>
         </div>
     </div>
 
     <script>
         const BASE_URL = "https://os134.hpc.ku.dk/PRIME_atlas";
         let igvBrowser = null;
-        
+
         // Track states to prevent duplicate loading
         const loadedAgnosticTracks = new Set();
         const loadedFacetTracks = new Set();
@@ -189,9 +567,8 @@
         // Modal Logic
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeAllModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active')); }
-        function closeModal(e) { if(e.target.classList.contains('modal-overlay')) closeAllModals(); }
+        function closeModal(e) { if (e.target.classList.contains('modal-overlay')) closeAllModals(); }
 
-        // Gene Annotation Track Configurations mapped to hg38_annotations.xml data
         const geneTracks = {
             "refseq": {
                 name: "Genes (RefSeq)",
@@ -213,7 +590,7 @@
                 displayMode: "EXPANDED"
             },
             "gencode_v47": {
-                name: "Genes (GENCODE v41)", // Kept matching your UI option string name
+                name: "Genes (GENCODE v47)",
                 type: "annotation",
                 format: "bigbed",
                 url: "https://hgdownload.soe.ucsc.edu/gbdb/hg38/gencode/gencodeV47.bb",
@@ -227,24 +604,23 @@
         const defaultK562Minus = `${BASE_URL}/PRIME_cellLines_TPM_bw/K562_N.TPM.minus.bw`;
 
         const igvOptions = {
-            genome: "hg38",
-            chromosomes: [
-                "chr1", "chr2", "chr3", "chr4", "chr5", "chr6", "chr7", "chr8", "chr9", 
-                "chr10", "chr11", "chr12", "chr13", "chr14", "chr15", "chr16", "chr17", 
-                "chr18", "chr19", "chr20", "chr21", "chr22", "chrX", "chrY", "chrM"
-            ],
+            reference: {
+                id: "GRCh38_no_alt",
+                name: "GRCh38 no-alt",
+                fastaURL: `${BASE_URL}/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta`,
+                indexURL: `${BASE_URL}/GRCh38_no_alt_analysis_set_GCA_000001405.15.fasta.fai`,
+                cytobandURL: `${BASE_URL}/cytoBandIdeo.primary.txt.gz`
+            },
             locus: "chr7:12685750-12691075", // Default viewport locus focus
-            cytobandURL: "https://s3.amazonaws.com/igv.org.genomes/hg38/annotations/cytoBandIdeo.txt.gz",
             tracks: [
                 geneTracks["refseq"],
                 {
                     name: "K562 (Nuclei, 0.75) (All CREs)",
-                    type: "annotation",
                     format: "bed",
                     url: defaultK562Bed,
                     indexURL: `${defaultK562Bed}.tbi`,
                     displayMode: "EXPANDED",
-                    itemRgb: true // Command igv.js to process color score indices
+                    itemRgb: true
                 },
                 {
                     name: "K562 (Nuclei, 0.75) Signal (+)",
@@ -258,6 +634,12 @@
                 }
             ]
         };
+
+        function formatFacetName(facet) {
+            return facet
+                .replaceAll(".", " ")
+                .replace(/\b\w/g, c => c.toUpperCase());
+        }
 
         const fantomFacets = [
             "B.lymphoblastoid", "Burkitts.lymphoma", "Hep.2", "T.cell", "Wilms.tumor", "acinar.cell",
@@ -341,7 +723,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             const igvDiv = document.getElementById("igv-container");
             const checkboxList = document.getElementById("facetCheckboxes");
-            
+
             // Register active state flags for the custom default initialization layout
             loadedFacetTracks.add("K562 (Nuclei, 0.75)");
 
@@ -356,7 +738,7 @@
             fantomFacets.forEach(f => {
                 const label = document.createElement('label');
                 label.className = 'facet-checkbox-item';
-                label.innerHTML = `<input type="checkbox" value="${f}"> <span>${f} (FANTOM5, 0.5)</span>`;
+                label.innerHTML = `<input type="checkbox" value="${f}"> <span>${formatFacetName(f)} (FANTOM5, 0.5)</span>`;
                 checkboxList.appendChild(label);
             });
 
@@ -374,7 +756,7 @@
         async function changeGeneAnnotation() {
             if (!igvBrowser) return;
             const selected = document.getElementById("geneAnnotationSelect").value;
-            
+
             const currentTracks = igvBrowser.findTracks();
             currentTracks.forEach(track => {
                 if (track.name && track.name.startsWith("Genes (")) {
@@ -406,17 +788,21 @@
         }
 
         async function loadAgnosticTrack() {
+
             if (!igvBrowser) return;
-            const suffix = document.getElementById('agnosticSelect').value; 
-            
+
+            const suffix = document.getElementById('agnosticSelect').value;
+
             if (loadedAgnosticTracks.has(suffix)) {
                 alert(`Agnostic FANTOM5 PRIME CREs (${suffix.replace('_', ' ')}) is already loaded.`);
                 return;
             }
 
+            document.body.style.cursor = "wait";
+
             try {
+
                 await igvBrowser.loadTrack({
-                    type: 'annotation',
                     format: 'bed',
                     url: `${BASE_URL}/PRIME_FANTOM5_agnostic/PRIME_FANTOM5_agnostic_${suffix}.bed.gz`,
                     indexURL: `${BASE_URL}/PRIME_FANTOM5_agnostic/PRIME_FANTOM5_agnostic_${suffix}.bed.gz.tbi`,
@@ -424,94 +810,172 @@
                     displayMode: "EXPANDED",
                     itemRgb: true
                 });
+
                 loadedAgnosticTracks.add(suffix);
-            } catch(e) {
+
+            } catch (e) {
+
                 console.error("Error loading agnostic track:", e);
-                alert(`Failed to load Agnostic ${suffix}. Ensure the server is reachable and the file exists.`);
+
+                alert(
+                    `Failed to load Agnostic ${suffix}. Ensure the server is reachable and the file exists.`
+                );
+
+            } finally {
+
+                document.body.style.cursor = "default";
+
             }
         }
 
         async function loadFacetTracks() {
+
             if (!igvBrowser) return;
-            
-            const checkboxes = document.querySelectorAll('#facetCheckboxes input[type="checkbox"]:checked:not(:disabled)');
+
+            const checkboxes = document.querySelectorAll(
+                '#facetCheckboxes input[type="checkbox"]:checked:not(:disabled)'
+            );
+
             if (checkboxes.length === 0) return;
 
-            for (const cb of checkboxes) {
-                const selection = cb.value;
-                let bedDistalUrl, bedProximalUrl, bwPlus, bwMinus, trackName, bedDistalName;
+            document.body.style.cursor = "wait";
 
-                const cellLineMatch = cellLinesMap.find(c => c.label === selection);
-                
-                if (cellLineMatch) {
-                    trackName = cellLineMatch.label;
-                    bedDistalUrl = `${BASE_URL}/PRIME_cellLines/PRIME_${cellLineMatch.bed}.bed.gz`;
-                    bedDistalName = `${trackName} (All CREs)`; 
-                    
-                    if(cellLineMatch.bw) {
-                        bwPlus = `${BASE_URL}/PRIME_cellLines_TPM_bw/${cellLineMatch.bw}.TPM.plus.bw`;
-                        bwMinus = `${BASE_URL}/PRIME_cellLines_TPM_bw/${cellLineMatch.bw}.TPM.minus.bw`;
+            try {
+
+                for (const cb of checkboxes) {
+
+                    const selection = cb.value;
+
+                    let bedDistalUrl,
+                        bedProximalUrl,
+                        bwPlus,
+                        bwMinus,
+                        trackName,
+                        bedDistalName;
+
+                    const cellLineMatch = cellLinesMap.find(
+                        c => c.label === selection
+                    );
+
+                    if (cellLineMatch) {
+
+                        trackName = cellLineMatch.label;
+
+                        bedDistalUrl =
+                            `${BASE_URL}/PRIME_cellLines/PRIME_${cellLineMatch.bed}.bed.gz`;
+
+                        bedDistalName =
+                            `${trackName} (All CREs)`;
+
+                        if (cellLineMatch.bw) {
+
+                            bwPlus =
+                                `${BASE_URL}/PRIME_cellLines_TPM_bw/${cellLineMatch.bw}.TPM.plus.bw`;
+
+                            bwMinus =
+                                `${BASE_URL}/PRIME_cellLines_TPM_bw/${cellLineMatch.bw}.TPM.minus.bw`;
+                        }
+
+                    } else if (fantomFacets.includes(selection)) {
+
+                        trackName = selection;
+
+                        bedDistalName = `${trackName} (Distal)`;
+
+                        const bwName =
+                            bwNameMap[selection] || selection;
+
+                        bedDistalUrl =
+                            `${BASE_URL}/PRIME_FANTOM5_facets/PRIME_FANTOM5_${selection}_distal_0.5.bed.gz`;
+
+                        bedProximalUrl =
+                            `${BASE_URL}/PRIME_FANTOM5_facets/PRIME_FANTOM5_${selection}_proximal_0.5.bed.gz`;
+
+                        bwPlus =
+                            `${BASE_URL}/PRIME_FANTOM5_facets_TPM_bw/${bwName}.TPM.plus.bw`;
+
+                        bwMinus =
+                            `${BASE_URL}/PRIME_FANTOM5_facets_TPM_bw/${bwName}.TPM.minus.bw`;
                     }
-                } 
-                else if (fantomFacets.includes(selection)) {
-                    trackName = selection;
-                    bedDistalName = `${trackName} (Distal)`;
-                    const bwName = bwNameMap[selection] || selection;
-                    
-                    bedDistalUrl = `${BASE_URL}/PRIME_FANTOM5_facets/PRIME_FANTOM5_${selection}_distal_0.5.bed.gz`;
-                    bedProximalUrl = `${BASE_URL}/PRIME_FANTOM5_facets/PRIME_FANTOM5_${selection}_proximal_0.5.bed.gz`;
-                    
-                    bwPlus = `${BASE_URL}/PRIME_FANTOM5_facets_TPM_bw/${bwName}.TPM.plus.bw`;
-                    bwMinus = `${BASE_URL}/PRIME_FANTOM5_facets_TPM_bw/${bwName}.TPM.minus.bw`;
+
+                    if (bedDistalUrl) {
+                        try {
+                            await igvBrowser.loadTrack({
+                                format: 'bed',
+                                url: bedDistalUrl,
+                                indexURL: `${bedDistalUrl}.tbi`,
+                                name: bedDistalName,
+                                displayMode: "EXPANDED",
+                                itemRgb: true
+                            });
+                        } catch (e) {
+                            console.error("Error loading BED for", trackName, e);
+                        }
+                    }
+
+                    if (bedProximalUrl) {
+                        try {
+                            await igvBrowser.loadTrack({
+                                format: 'bed',
+                                url: bedProximalUrl,
+                                indexURL: `${bedProximalUrl}.tbi`,
+                                name: `${trackName} (Proximal)`,
+                                displayMode: "EXPANDED",
+                                itemRgb: true
+                            });
+                        } catch (e) {
+                            console.error("Error loading proximal BED for", trackName, e);
+                        }
+                    }
+
+                    if (bwPlus) {
+                        try {
+                            await igvBrowser.loadTrack({
+                                type: 'wig',
+                                format: 'bigwig',
+                                url: bwPlus,
+                                name: `${trackName} Signal (+)`,
+                                color: "#2563eb"
+                            });
+                        } catch (e) {
+                            console.error("Error loading plus bigWig for", trackName, e);
+                        }
+                    }
+
+                    if (bwMinus) {
+                        try {
+                            await igvBrowser.loadTrack({
+                                type: 'wig',
+                                format: 'bigwig',
+                                url: bwMinus,
+                                name: `${trackName} Signal (-)`,
+                                color: "#e11d48"
+                            });
+                        } catch (e) {
+                            console.error("Error loading minus bigWig for", trackName, e);
+                        }
+                    }
+
+                    cb.checked = false;
+                    cb.disabled = true;
+
+                    if (cb.parentElement && cb.parentElement.querySelector('span')) {
+
+                        cb.parentElement.querySelector('span').style.opacity = "0.5";
+
+                        cb.parentElement.querySelector('span').title =
+                            "Track is already loaded.";
+                    }
+
+                    loadedFacetTracks.add(selection);
                 }
 
-                if(bedDistalUrl) {
-                    try {
-                        await igvBrowser.loadTrack({
-                            type: 'annotation', format: 'bed',
-                            url: bedDistalUrl, indexURL: `${bedDistalUrl}.tbi`,
-                            name: bedDistalName, displayMode: "EXPANDED",
-                            itemRgb: true
-                        });
-                    } catch(e) { console.error("Error loading BED for", trackName, e); }
-                }
+                closeSidebarMobile();
 
-                if(bedProximalUrl) {
-                    try {
-                        await igvBrowser.loadTrack({
-                            type: 'annotation', format: 'bed',
-                            url: bedProximalUrl, indexURL: `${bedProximalUrl}.tbi`,
-                            name: `${trackName} (Proximal)`, displayMode: "EXPANDED",
-                            itemRgb: true
-                        });
-                    } catch(e) { console.error("Error loading proximal BED for", trackName, e); }
-                }
+            } finally {
 
-                if(bwPlus) {
-                    try {
-                        await igvBrowser.loadTrack({
-                            type: 'wig', format: 'bigwig', url: bwPlus,
-                            name: `${trackName} Signal (+)`, color: "#2563eb"
-                        });
-                    } catch(e) { console.error("Error loading plus bigWig for", trackName, e); }
-                }
-                
-                if(bwMinus) {
-                    try {
-                        await igvBrowser.loadTrack({
-                            type: 'wig', format: 'bigwig', url: bwMinus,
-                            name: `${trackName} Signal (-)`, color: "#e11d48"
-                        });
-                    } catch(e) { console.error("Error loading minus bigWig for", trackName, e); }
-                }
-                
-                cb.checked = false;
-                cb.disabled = true;
-                if(cb.parentElement && cb.parentElement.querySelector('span')) {
-                    cb.parentElement.querySelector('span').style.opacity = "0.5";
-                    cb.parentElement.querySelector('span').title = "Track is already loaded.";
-                }
-                loadedFacetTracks.add(selection);
+                document.body.style.cursor = "default";
+
             }
         }
 
@@ -532,12 +996,32 @@
             checkboxes.forEach(cb => {
                 cb.disabled = false;
                 cb.checked = false;
-                if(cb.parentElement && cb.parentElement.querySelector('span')) {
+                if (cb.parentElement && cb.parentElement.querySelector('span')) {
                     cb.parentElement.querySelector('span').style.opacity = "1";
                     cb.parentElement.querySelector('span').title = "";
                 }
             });
         }
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('open');
+
+            const btn = document.getElementById('sidebarToggle');
+            btn.textContent = sidebar.classList.contains('open') ? '✕' : '☰';
+        }
+
+        function closeSidebarMobile() {
+            if (window.innerWidth <= 1024) {
+                document.querySelector('.sidebar').classList.remove('open');
+            }
+        }
     </script>
+    <footer class="footer">
+        PRIME CRE Atlas · <a href="https://anderssonlab.org/" target="_blank">Andersson Lab</a> · <a
+            href="https://tgrlab.org/" target="_blank">Tissue Gene Regulation Lab</a> ·
+        University of Copenhagen © 2026
+    </footer>
 </body>
+
 </html>
