@@ -555,15 +555,17 @@
         <div class="modal" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeAllModals()">×</button>
             <h3>Methods</h3>
-            <p>The <a href="https://anderssonlab.org/PRIME/" target="_blank">PRIME toolkit</a> was used to identify
-                active cis-regulatory elements from CAGE data, including a curated set of 760 FANTOM5 CAGE libraries
-                from the <a href="https://fantom.gsc.riken.jp/5/" target="_blank">FANTOM5 project</a>.</p>
-            <p style="margin-bottom: 0.5rem;">New CAGE sequencing data from K562, HepG2, GM12878, A549, HCT116 cells
-                were preprocessed and mapped using the <a href="https://github.com/anderssonlab/PRIMEprep"
-                    target="_blank">PRIMEprep pipeline</a> (v0.1.0).</p>
-            <p style="margin-bottom: 0.5rem;">Downstream analyses were performed in R using <a
-                    href="https://github.com/anderssonlab/PRIME" target="_blank">PRIME</a> (v0.1.0) and in Python using
-                <a href="https://github.com/anderssonlab/PRIMEmodel" target="_blank">PRIMEmodel</a> (v1.0.0).
+            <p>
+                The <a href="https://anderssonlab.org/PRIME/" target="_blank">PRIME toolkit</a> was used to identify active cis-regulatory elements (CREs) from CAGE data. FANTOM5 CAGE datasets used in this resource were downloaded from the <a href="https://fantom.gsc.riken.jp/5/" target="_blank">FANTOM5 data portal</a>, including a curated set of 760 human CAGE libraries from the FANTOM5 project. 
+            </p>
+            <p>    
+                Users of FANTOM5-derived data should cite the primary FANTOM5 reference: FANTOM Consortium and the RIKEN PMI and CLST (DGT). <i>A promoter-level mammalian expression atlas</i>. Nature 507, 462–470 (2014). DOI: <a href="https://doi.org/10.1038/nature13182" target="_blank">10.1038/nature13182</a>.
+            </p>
+            <p style="margin-bottom: 0.5rem;">
+                New CAGE sequencing data from K562, HepG2, GM12878, A549, and HCT116 cells were preprocessed and mapped using the <a href="https://github.com/anderssonlab/PRIMEprep" target="_blank">PRIMEprep pipeline</a> (v0.1.0).
+            </p>
+            <p style="margin-bottom: 0.5rem;">
+                Downstream analyses were performed in R using <a href="https://github.com/anderssonlab/PRIME" target="_blank">PRIME</a> (v0.1.0) and in Python using <a href="https://github.com/anderssonlab/PRIMEmodel" target="_blank">PRIMEmodel</a> (v1.0.0).
             </p>
         </div>
     </div>
