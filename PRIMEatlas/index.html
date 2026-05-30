@@ -206,7 +206,7 @@
         }
 
         .facet-checkbox-list {
-            max-height: 250px;
+            max-height: 180px;
             overflow-y: auto;
             padding: 0.5rem;
         }
@@ -329,6 +329,46 @@
             line-height: 1.4;
         }
 
+        .download-section {
+            margin-bottom: 1rem;
+        }
+
+        .download-item {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .download-item:last-child {
+            border-bottom: none;
+        }
+
+        .download-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .download-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .download-links a {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            background: #f1f5f9;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .download-links a:hover {
+            background: #e2e8f0;
+        }
+
         @media (max-width: 1024px) {
 
             body {
@@ -440,7 +480,7 @@
         <div class="sidebar">
 
             <div class="search-group">
-                <h2>1. Navigate locus</h2>
+                <h2>Navigate locus</h2>
                 <label>Gene or coordinates</label>
                 <input type="text" id="locusInput" class="search-input" placeholder="e.g., SMAD3"
                     value="chr7:12,685,750-12,691,075">
@@ -454,10 +494,8 @@
                 </select>
             </div>
 
-            <hr style="border: 0; border-top: 1px solid var(--border); margin: 1.5rem 0;">
-
             <div class="search-group">
-                <h2>2. Load agnostic PRIME CREs</h2>
+                <h2>Load agnostic CREs</h2>
                 <label>Global FANTOM5 dataset</label>
                 <select id="agnosticSelect" class="search-input">
                     <option value="all_0.5">All loci (≥ 0.5)</option>
@@ -471,10 +509,8 @@
                 <button class="btn btn-outline" onclick="loadAgnosticTrack()">Load agnostic track</button>
             </div>
 
-            <hr style="border: 0; border-top: 1px solid var(--border); margin: 1.5rem 0;">
-
             <div class="search-group">
-                <h2>3. Load PRIME CREs and CAGE signal</h2>
+                <h2>Load CREs and CAGE signal</h2>
                 <label>Select FANTOM5 facets or cell lines</label>
                 <div class="multi-select-container">
                     <input type="text" id="facetFilter" class="multi-select-search" placeholder="Type to filter..."
@@ -527,19 +563,35 @@
                     target="_blank">PRIMEprep pipeline</a> (v0.1.0).</p>
             <p style="margin-bottom: 0.5rem;">Downstream analyses were performed in R using <a
                     href="https://github.com/anderssonlab/PRIME" target="_blank">PRIME</a> (v0.1.0) and in Python using
-                <a href="https://github.com/anderssonlab/PRIMEmodel" target="_blank">PRIMEmodel</a> (v1.0.0).</p>
+                <a href="https://github.com/anderssonlab/PRIMEmodel" target="_blank">PRIMEmodel</a> (v1.0.0).
+            </p>
         </div>
     </div>
 
     <div id="modal-data" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeAllModals()">×</button>
+
             <h3>Data availability</h3>
             <p>All PRIME predictions and signal tracks in K562, GM12878, HepG2, HCT116, A549 cells and FANTOM5 facets
                 are available at Zenodo (doi: <a href="https://doi.org/10.5281/zenodo.19712783"
                     target="_blank">10.5281/zenodo.19712783</a>, v0.2.0).</p>
             <p><a href="https://os134.hpc.ku.dk/PRIME_atlas/PRIME_FANTOM5_agnostic/facet_statistics.tsv"
                     class="download-link" target="_blank">Download facet statistics (.tsv)</a></p>
+
+            <h3>Downloads</h3>
+            <p>
+                Download individual BED files below. For bulk downloads and CAGE signal
+                tracks (bigWig), please use the Zenodo repository.
+            </p>
+            <h4>Agnostic PRIME CREs</h4>
+            <div id="download-agnostic"></div>
+            <h4>Cell lines</h4>
+            <div id="download-celllines"></div>
+            <h4>FANTOM5 facets</h4>
+            <input type="text" id="downloadFacetFilter" class="search-input" placeholder="Filter facets..."
+                oninput="filterDownloadFacets()">
+            <div id="download-facets"></div>
         </div>
     </div>
 
@@ -741,6 +793,8 @@
                 label.innerHTML = `<input type="checkbox" value="${f}"> <span>${formatFacetName(f)} (FANTOM5, 0.5)</span>`;
                 checkboxList.appendChild(label);
             });
+
+            populateDownloads();
 
             igv.createBrowser(igvDiv, igvOptions)
                 .then(function (browser) {
@@ -1016,6 +1070,124 @@
                 document.querySelector('.sidebar').classList.remove('open');
             }
         }
+        function populateDownloads() {
+
+            const agnostic = document.getElementById("download-agnostic");
+            const cellLines = document.getElementById("download-celllines");
+            const facets = document.getElementById("download-facets");
+
+            agnostic.innerHTML = "";
+            cellLines.innerHTML = "";
+            facets.innerHTML = "";
+
+            const agnosticTracks = [
+                "all_0.5",
+                "all_0.75",
+                "distal_0.5",
+                "distal_0.75",
+                "proximal_0.5",
+                "proximal_0.75",
+                "pooled_0.75"
+            ];
+
+            agnosticTracks.forEach(track => {
+
+                agnostic.insertAdjacentHTML(
+                    "beforeend",
+                    `
+    <div class="download-item">
+
+        <div class="download-title">
+            ${track.replaceAll("_", " ")}
+        </div>
+
+        <div class="download-links">
+
+            <a href="${BASE_URL}/PRIME_FANTOM5_agnostic/PRIME_FANTOM5_agnostic_${track}.bed.gz">
+                Download BED
+            </a>
+
+        </div>
+
+    </div>
+    `
+                );
+            });
+
+            cellLinesMap.forEach(c => {
+
+                cellLines.insertAdjacentHTML(
+                    "beforeend",
+                    `
+    <div class="download-item">
+
+        <div class="download-title">
+            ${c.label}
+        </div>
+
+        <div class="download-links">
+
+            <a href="${BASE_URL}/PRIME_cellLines/PRIME_${c.bed}.bed.gz">
+                Download BED
+            </a>
+
+        </div>
+
+    </div>
+    `
+                );
+            });
+
+            fantomFacets.forEach(facet => {
+
+                facets.insertAdjacentHTML(
+                    "beforeend",
+                    `
+    <div class="download-item download-facet-item">
+
+        <div class="download-title">
+            ${formatFacetName(facet)}
+        </div>
+
+        <div class="download-links">
+
+            <a href="${BASE_URL}/PRIME_FANTOM5_facets/PRIME_FANTOM5_${facet}_distal_0.5.bed.gz">
+                Download distal BED
+            </a>
+
+            <a href="${BASE_URL}/PRIME_FANTOM5_facets/PRIME_FANTOM5_${facet}_proximal_0.5.bed.gz">
+                Download proximal BED
+            </a>
+
+        </div>
+
+    </div>
+    `
+                );
+            });
+        }
+
+        function filterDownloadFacets() {
+
+            const term =
+                document.getElementById("downloadFacetFilter")
+                    .value
+                    .toLowerCase();
+
+            document
+                .querySelectorAll(".download-facet-item")
+                .forEach(item => {
+
+                    const text =
+                        item.textContent.toLowerCase();
+
+                    item.style.display =
+                        text.includes(term)
+                            ? "flex"
+                            : "none";
+                });
+        }
+
     </script>
     <footer class="footer">
         PRIME CRE Atlas · <a href="https://anderssonlab.org/" target="_blank">Andersson Lab</a> · <a
