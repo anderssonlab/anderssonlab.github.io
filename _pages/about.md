@@ -13,7 +13,6 @@ The Andersson Lab develops computational and experimental approaches to understa
 We combine regulatory genomics, machine learning, statistical learning, genetics, and molecular biology to:
 
 - Identify active regulatory elements, determine which genes they regulate, and define the cell types in which they function
-
 - Learn how DNA sequence encodes regulatory activity and predict the effects of noncoding genetic variants
 
 Our work integrates experimental genomics with machine learning to identify active regulatory elements, map enhancer-gene interactions, uncover the sequence logic of gene regulation, and interpret the functional consequences of noncoding genetic variation.

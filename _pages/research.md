@@ -39,16 +39,16 @@ From Zaugg, J.B., Sahlén, P., Andersson, R. et al. <a href="https://doi.org/10.
 
 Our research is driven by four fundamental questions in regulatory genomics:
 
-### Which genomic sequences regulate gene expression?
+<h4>Which genomic sequences regulate gene expression?</h4>
 We develop experimental and computational approaches to identify active enhancers and promoters across diverse biological systems.
 
-### Which genes do regulatory elements control?
+<h4>Which genes do regulatory elements control?</h4>
 We investigate how distal regulatory elements communicate with their target genes and develop methods to map enhancer–gene interactions across cell types and tissues.
 
-### How does the genome encode regulatory activity?
+<h4>How does the genome encode regulatory activity?</h4>
 We study how DNA sequence determines regulatory activity, transcription factor cooperativity, and cell-type specificity, enabling predictive models of gene regulation directly from genomic sequence.
 
-### How do noncoding genetic variants contribute to disease?
+<h4>How do noncoding genetic variants contribute to disease?</h4>
 We develop computational frameworks to predict the molecular consequences of regulatory genetic variation and connect human genetic associations to their underlying biological mechanisms.
 
 ---
