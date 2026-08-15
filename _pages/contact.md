@@ -9,7 +9,6 @@ horizontal: false
 
 <strong>Robin Andersson</strong><br>
 Associate Professor, PhD<br>
-Head of Section<br>
 University of Copenhagen<br>
 Department of Biology<br>
 Section for Computational and RNA Biology<br>
