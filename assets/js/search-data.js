@@ -37,16 +37,16 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/publications/";
           },
-        },{id: "nav-data",
-          title: "Data",
-          description: "Selected published datasets",
+        },{id: "nav-data-amp-resources",
+          title: "Data &amp; Resources",
+          description: "Selected published datasets, atlases, and computational resources",
           section: "Navigation",
           handler: () => {
             window.location.href = "/data/";
           },
-        },{id: "nav-software",
-          title: "Software",
-          description: "Highlighted GitHub repositories",
+        },{id: "nav-software-amp-tools",
+          title: "Software &amp; Tools",
+          description: "Open-source software developed by the Andersson Lab",
           section: "Navigation",
           handler: () => {
             window.location.href = "/software/";
