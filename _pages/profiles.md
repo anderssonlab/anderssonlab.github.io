@@ -18,6 +18,10 @@ profiles:
     content: about_xuening.md
     image_circular: false 
   - align: left
+    image: Yifan.jpg
+    content: about_yifan.md
+    image_circular: false 
+  - align: left
     image: Maddie.jpg
     content: about_maddie.md
     image_circular: false 
