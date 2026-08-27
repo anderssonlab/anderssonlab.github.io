@@ -24,6 +24,10 @@ profiles:
   - align: left
     image: Maddie.jpg
     content: about_maddie.md
+    image_circular: false
+  - align: left
+    image: Carmen.jpg
+    content: about_carmen.md
     image_circular: false 
   - align: left
     image: Natsuda.jpg
