@@ -1,4 +1,4 @@
-#### Xuening He – Postdoc
+#### Xuening He, PhD – Postdoc
 
 <div class="social-profile">
 <div class="contact-icons">
