@@ -16,11 +16,11 @@ profiles:
   - align: left
     image: Xuening.jpg
     content: about_xuening.md
-    image_circular: false 
+    image_circular: false
   - align: left
     image: Yifan.jpg
     content: about_yifan.md
-    image_circular: false 
+    image_circular: false
   - align: left
     image: Maddie.jpg
     content: about_maddie.md
@@ -28,15 +28,15 @@ profiles:
   - align: left
     image: Carmen.jpg
     content: about_carmen.md
-    image_circular: false 
+    image_circular: false
   - align: left
     image: Natsuda.jpg
     content: about_natsuda.md
-    image_circular: false 
+    image_circular: false
   - align: left
     image: Marta.jpg
     content: about_marta.md
-    image_circular: false 
+    image_circular: false
   - align: left
     image: Christian.jpg
     content: about_christian.md

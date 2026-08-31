@@ -56,7 +56,7 @@ We develop computational frameworks to predict the molecular consequences of reg
 <h3>Selected publications</h3>
 
 - Andersson R, et al. <a href="http://dx.doi.org/10.1038/nature12787">An atlas of active enhancers across human cell types and tissues</a>. Nature. 2014
-- Rennie S, et al. <a href="http://dx.doi.org/10.1093/nar/gky244">Transcription start site analysis reveals widespread divergent transcription in *D. melanogaster* and core promoter-encoded enhancer activities</a>. Nucleic Acids Research. 2018
+- Rennie S, et al. <a href="http://dx.doi.org/10.1093/nar/gky244">Transcription start site analysis reveals widespread divergent transcription in _D. melanogaster_ and core promoter-encoded enhancer activities</a>. Nucleic Acids Research. 2018
 - Einarsson H, et al. <a href="https://doi.org/10.7554/eLife.80943">Promoter sequence and architecture determine expression variability and confer robustness to genetic variants</a>. eLife. 2022
 - Wenger, et al. <a href="https://doi.org/10.1038/s41588-023-01476-x">Symmetric inheritance of parental histones governs epigenome maintenance and embryonic stem cell identity</a>. Nature Genetics. 2023
 - He, et al. <a href="https://doi.org/10.1101/2025.06.19.660093">Genome-wide rules of transcription factor cooperativity revealed through in silico binding site ablation</a>. 2025
