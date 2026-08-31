@@ -8,6 +8,6 @@
 </div>
 </div>
 
-Yifan holds a B.Sc. in Biological Sciences from Fudan University in China, and M.Sc. and Ph.D. degrees in Computational Biology from the University of Copenhagen. 
+Yifan holds a B.Sc. in Biological Sciences from Fudan University in China, and M.Sc. and Ph.D. degrees in Computational Biology from the University of Copenhagen.
 
-His research focuses on the dynamics of gene regulation. During his Ph.D. in Sandelin's group, he worked on identifying gene program changes underlying cancer microenvironment adaptation. He continued in the group as a postdoctoral fellow, studying selective RNA degradation through full-length RNA sequencing. Now, he works in Andersson's lab, developing interpretable deep learning models of enhancer regulation. 
+His research focuses on the dynamics of gene regulation. During his Ph.D. in Sandelin's group, he worked on identifying gene program changes underlying cancer microenvironment adaptation. He continued in the group as a postdoctoral fellow, studying selective RNA degradation through full-length RNA sequencing. Now, he works in Andersson's lab, developing interpretable deep learning models of enhancer regulation.
