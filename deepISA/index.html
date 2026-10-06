@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DeepISA Explorer</title>
+    <style>
+      :root {
+        --primary: #0284c7;
+        --primary-hover: #0369a1;
+        --bg-page: #f8fafc;
+        --border: #e2e8f0;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --nav-bg: #0f172a;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: var(--bg-page);
+        color: var(--text-main);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      /* Navbar Header */
+      .navbar {
+        background: var(--nav-bg);
+        color: white;
+        padding: 0 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 60px;
+      }
+
+      .navbar-brand {
+        font-size: 1.25rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .navbar-brand span {
+        font-size: 0.85rem;
+        font-weight: 400;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+      }
+
+      /* Dashboard Grid */
+      .dashboard {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        flex: 1;
+      }
+
+      .sidebar {
+        background: white;
+        border-right: 1px solid var(--border);
+        padding: 1.5rem;
+        overflow-y: auto;
+      }
+
+      .sidebar h2 {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+        color: var(--primary);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .control-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .control-group label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.4rem;
+      }
+
+      .select-input, .range-input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        font-size: 0.9rem;
+        outline: none;
+        background: #fafafa;
+      }
+
+      .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      .main-view {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        background: white;
+      }
+
+      .view-header {
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 0.75rem;
+      }
+
+      .view-header h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-main);
+      }
+
+      /* Downloads bar */
+      .download-bar {
+        background: #f1f5f9;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .download-bar span {
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .btn-download {
+        display: inline-block;
+        background: var(--primary);
+        color: white;
+        padding: 0.4rem 0.8rem;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: background 0.2s;
+      }
+
+      .btn-download:hover {
+        background: var(--primary-hover);
+      }
+
+      /* Dynamic Grid system */
+      .plot-grid {
+        display: grid;
+        gap: 1.25rem;
+        margin-bottom: 2rem;
+      }
+
+      .plot-card {
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 0.75rem;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .plot-card img {
+        max-width: 100%;
+        max-height: 320px;
+        object-fit: contain;
+      }
+
+      .plot-card .caption {
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-main);
+        text-align: center;
+      }
+
+      .section-divider {
+        border-top: 1px solid var(--border);
+        margin: 1.5rem 0;
+      }
+
+      .multi-checkbox-list {
+        max-height: 180px;
+        overflow-y: auto;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 0.5rem;
+        background: #fafafa;
+      }
+
+      .multi-checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.85rem;
+        padding: 0.15rem 0;
+      }
+
+      .info-box {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        background: #f0f9ff;
+        border-left: 3px solid var(--primary);
+        padding: 0.5rem;
+        margin-top: 0.5rem;
+        border-radius: 2px;
+      }
+
+      .footer {
+        text-align: center;
+        padding: 0.75rem;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        border-top: 1px solid var(--border);
+        background: #fafafa;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="navbar-brand">
+        🧬 DeepISA <span>TF Cooperativity Explorer</span>
+      </div>
+    </nav>
+
+    <div class="dashboard">
+      <div class="sidebar">
+        <div class="control-group">
+          <h2>Navigation</h2>
+          <label>View Mode</label>
+          <select id="viewModeSelect" class="select-input" onchange="renderView()">
+            <option value="cell" selected>Cell-Type Centric</option>
+            <option value="repro">Reproducibility (Plot-Centric)</option>
+          </select>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="control-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="showEmergence" onchange="renderView()" />
+            Show Emergence (Half → One → Best)
+          </label>
+        </div>
+
+        <div class="control-group" id="gridDensityContainer">
+          <label id="gridDensityLabel">Grid Density (Columns): 3</label>
+          <input type="range" id="gridDensitySlider" class="range-input" min="1" max="5" value="3" oninput="updateGridDensity(this.value)" />
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Cell-Centric View Controls -->
+        <div id="cellControls" class="control-group">
+          <label>Select Cell Type</label>
+          <select id="cellSelect" class="select-input" onchange="renderView()"></select>
+        </div>
+
+        <!-- Reproducibility View Controls -->
+        <div id="reproControls" class="control-group" style="display: none;">
+          <label>Select Cell Types</label>
+          <div class="multi-checkbox-list" id="cellCheckboxes"></div>
+
+          <label style="margin-top: 1rem;">Select Plot Theme</label>
+          <select id="themeSelect" class="select-input" onchange="renderView()"></select>
+        </div>
+      </div>
+
+      <div class="main-view" id="mainContent">
+        <!-- Rendered output -->
+      </div>
+    </div>
+
+    <script>
+      const BASE_PATH = "."; // Path relative to host directory
+
+      // Structural state computed from server directory tree
+      let manifestData = {
+        cells: {}
+      };
+
+      let currentGridCols = 3;
+
+      // 1. Fetch file manifest or index dynamically
+      async function initData() {
+        try {
+          const res = await fetch(`${BASE_PATH}/manifest.json`);
+          if (res.ok) {
+            manifestData = await res.json();
+          } else {
+            console.warn("manifest.json not found. Attempting directory index fallback...");
+          }
+        } catch (e) {
+          console.error("Failed to load metadata manifest:", e);
+        }
+        populateControls();
+        renderView();
+      }
+
+      function populateControls() {
+        const cellSelect = document.getElementById("cellSelect");
+        const cellCheckboxes = document.getElementById("cellCheckboxes");
+
+        cellSelect.innerHTML = "";
+        cellCheckboxes.innerHTML = "";
+
+        const cellNames = Object.keys(manifestData.cells).sort();
+
+        cellNames.forEach((cell, idx) => {
+          // Add to single select
+          const opt = document.createElement("option");
+          opt.value = cell;
+          opt.textContent = cell;
+          cellSelect.appendChild(opt);
+
+          // Add to multi-select list
+          const label = document.createElement("label");
+          label.className = "multi-checkbox-item";
+          label.innerHTML = `<input type="checkbox" value="${cell}" ${idx < 6 ? "checked" : ""} onchange="updateThemesAndRender()"> <span>${cell}</span>`;
+          cellCheckboxes.appendChild(label);
+        });
+
+        updateThemeDropdown();
+      }
+
+      function getSelectedCells() {
+        const checked = document.querySelectorAll('#cellCheckboxes input[type="checkbox"]:checked');
+        return Array.from(checked).map(cb => cb.value);
+      }
+
+      function updateThemeDropdown() {
+        const selectedCells = getSelectedCells();
+        const themeSelect = document.getElementById("themeSelect");
+        themeSelect.innerHTML = "";
+
+        if (selectedCells.length === 0) return;
+
+        // Intersection of themes across selected cell types
+        let commonThemes = null;
+        selectedCells.forEach(cell => {
+          const cellObj = manifestData.cells[cell];
+          if (!cellObj) return;
+
+          const defaultModel = cellObj.models.includes("Analysis_best") 
+            ? "Analysis_best" 
+            : cellObj.models[cellObj.models.length - 1];
+
+          const themes = cellObj.themes[defaultModel] || [];
+          if (commonThemes === null) {
+            commonThemes = new Set(themes);
+          } else {
+            commonThemes = new Set([...commonThemes].filter(x => themes.includes(x)));
+          }
+        });
+
+        const sortedThemes = Array.from(commonThemes || []).sort();
+        sortedThemes.forEach(t => {
+          const opt = document.createElement("option");
+          opt.value = t;
+          opt.textContent = t;
+          themeSelect.appendChild(opt);
+        });
+      }
+
+      function updateThemesAndRender() {
+        updateThemeDropdown();
+        renderView();
+      }
+
+      function updateGridDensity(val) {
+        currentGridCols = val;
+        document.getElementById("gridDensityLabel").textContent = `Grid Density (Columns): ${val}`;
+        renderView();
+      }
+
+      function renderView() {
+        const viewMode = document.getElementById("viewModeSelect").value;
+        const showEmergence = document.getElementById("showEmergence").checked;
+        const main = document.getElementById("mainContent");
+
+        document.getElementById("cellControls").style.display = viewMode === "cell" ? "block" : "none";
+        document.getElementById("reproControls").style.display = viewMode === "repro" ? "block" : "none";
+
+        if (viewMode === "cell") {
+          renderCellCentric(main, showEmergence);
+        } else {
+          renderReproducibility(main, showEmergence);
+        }
+      }
+
+      // --- Cell-Type Centric View ---
+      function renderCellCentric(container, showEmergence) {
+        const cell = document.getElementById("cellSelect").value;
+        if (!cell || !manifestData.cells[cell]) {
+          container.innerHTML = `<p>No data available for selected cell type.</p>`;
+          return;
+        }
+
+        const cellData = manifestData.cells[cell];
+        const models = cellData.models || [];
+        const defaultModel = models.includes("Analysis_best") ? "Analysis_best" : models[models.length - 1];
+        const themes = cellData.themes[defaultModel] || [];
+
+        let html = `
+          <div class="view-header">
+            <h1>Cell Type: ${cell}</h1>
+          </div>
+
+          <div class="download-bar">
+            <span>📥 Download Data (${cell}):</span>
+            <a class="btn-download" href="${BASE_PATH}/${cell}/${defaultModel}/Data/coop_tf_pair_t0.csv" download="${cell}_coop_tf_pair_t0.csv">coop_tf_pair_t0.csv</a>
+            <a class="btn-download" href="${BASE_PATH}/${cell}/${defaultModel}/Data/coop_tf_t0.csv" download="${cell}_coop_tf_t0.csv">coop_tf_t0.csv</a>
+          </div>
+        `;
+
+        if (showEmergence) {
+          themes.forEach(theme => {
+            html += `<h3 style="margin-bottom: 0.5rem;">Theme: ${theme}</h3>`;
+            html += `<div class="plot-grid" style="grid-template-columns: repeat(${models.length}, 1fr);">`;
+            models.forEach(model => {
+              const imgPath = `${BASE_PATH}/${cell}/${model}/Plots/${theme}.png`;
+              html += `
+                <div class="plot-card">
+                  <img src="${imgPath}" alt="${theme}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><text x=\'10\' y=\'50\' fill=\'red\'>Missing Plot</text></svg>'">
+                  <div class="caption">${model.replace("Analysis_", "").toUpperCase()}</div>
+                </div>
+              `;
+            });
+            html += `</div><div class="section-divider"></div>`;
+          });
+        } else {
+          html += `<div class="plot-grid" style="grid-template-columns: repeat(${currentGridCols}, 1fr);">`;
+          themes.forEach(theme => {
+            const imgPath = `${BASE_PATH}/${cell}/${defaultModel}/Plots/${theme}.png`;
+            html += `
+              <div class="plot-card">
+                <img src="${imgPath}" alt="${theme}">
+                <div class="caption">${theme}</div>
+              </div>
+            `;
+          });
+          html += `</div>`;
+        }
+
+        container.innerHTML = html;
+      }
+
+      // --- Reproducibility View ---
+      function renderReproducibility(container, showEmergence) {
+        const selectedCells = getSelectedCells();
+        const selectedTheme = document.getElementById("themeSelect").value;
+
+        if (selectedCells.length === 0 || !selectedTheme) {
+          container.innerHTML = `<p>Please select cell types and a valid common plot theme.</p>`;
+          return;
+        }
+
+        let html = `
+          <div class="view-header">
+            <h1>Reproducibility Theme: ${selectedTheme}</h1>
+          </div>
+        `;
+
+        if (showEmergence) {
+          selectedCells.forEach(cell => {
+            const cellData = manifestData.cells[cell];
+            const models = cellData ? cellData.models : [];
+            html += `<h3 style="margin-bottom: 0.5rem;">Cell Type: ${cell}</h3>`;
+            html += `<div class="plot-grid" style="grid-template-columns: repeat(${models.length || 1}, 1fr);">`;
+            models.forEach(model => {
+              const imgPath = `${BASE_PATH}/${cell}/${model}/Plots/${selectedTheme}.png`;
+              html += `
+                <div class="plot-card">
+                  <img src="${imgPath}" alt="${selectedTheme}">
+                  <div class="caption">${model.replace("Analysis_", "").toUpperCase()}</div>
+                </div>
+              `;
+            });
+            html += `</div><div class="section-divider"></div>`;
+          });
+        } else {
+          html += `<div class="plot-grid" style="grid-template-columns: repeat(${currentGridCols}, 1fr);">`;
+          selectedCells.forEach(cell => {
+            const cellData = manifestData.cells[cell];
+            const models = cellData ? cellData.models : [];
+            const defaultModel = models.includes("Analysis_best") ? "Analysis_best" : models[models.length - 1];
+            const imgPath = `${BASE_PATH}/${cell}/${defaultModel}/Plots/${selectedTheme}.png`;
+            html += `
+              <div class="plot-card">
+                <img src="${imgPath}" alt="${selectedTheme}">
+                <div class="caption">${cell}</div>
+              </div>
+            `;
+          });
+          html += `</div>`;
+        }
+
+        container.innerHTML = html;
+      }
+
+      document.addEventListener("DOMContentLoaded", initData);
+    </script>
+  </body>
+</html>
