@@ -290,7 +290,8 @@
     </div>
 
     <script>
-      const BASE_PATH = "."; // Path relative to host directory
+      const MANIFEST_URL = "https://anderssonlab.github.io/deepISA/manifest.json";
+      const BASE_PATH = "https://os134.hpc.ku.dk/deepISA/"; // Path relative to host directory
 
       // Structural state computed from server directory tree
       let manifestData = {
@@ -302,7 +303,7 @@
       // 1. Fetch file manifest or index dynamically
       async function initData() {
         try {
-          const res = await fetch(`${BASE_PATH}/manifest.json`);
+          const res = await fetch(MANIFEST_URL);
           if (res.ok) {
             manifestData = await res.json();
           } else {
