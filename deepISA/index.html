@@ -290,28 +290,106 @@
     </div>
 
     <script>
-      const MANIFEST_URL = "https://anderssonlab.github.io/deepISA/manifest.json";
-      const BASE_PATH = "https://os134.hpc.ku.dk/deepISA/"; // Path relative to host directory
+      const MANIFEST_URL = "https://os134.hpc.ku.dk/deepISA/manifest.json";
+      const BASE_PATH = "https://os134.hpc.ku.dk/deepISA"; // Path relative to host directory (no trailing slash)
+
+      // --- Fallback / shared data ---
+      // Confirmed: every cell type has the same set of models and the same set of plot themes.
+      // This is used whenever manifest.json cannot be fetched (e.g. CORS, wrong path, 404).
+      const SHARED_MODELS = ["Analysis_1", "Analysis_1_4", "Analysis_best"];
+
+      const SHARED_THEMES = [
+        "coop_score_heatmap_t0",
+        "coop_score_hist_t0",
+        "coop_vs_importance_t0",
+        "dbd_coop_summary_t0",
+        "distance_by_category_t0",
+        "dna_ppi_enrichment_by_pval_t0",
+        "dna_ppi_enrichment_by_score_t0",
+        "family_coop_summary_t0",
+        "interaction_decay_signed",
+        "intra_family_distribution_t0",
+        "motif_gc_by_coop_t0",
+        "null_interaction",
+        "partner_specificity_ratio_t0",
+        "ppi_enrichment_by_coop_score_t0",
+        "ppi_enrichment_by_p_val_t0",
+        "ppi_violin_validation_t0_BRD4",
+        "ppi_violin_validation_t0_Mediator",
+        "ppi_violin_validation_t0_POLII",
+        "ppi_violin_validation_t0_SWI_SNF",
+        "ppi_violin_validation_t0_TFIIB",
+        "ppi_violin_validation_t0_TFIID",
+        "ppi_violin_validation_t0_TFIIE",
+        "ppi_violin_validation_t0_TFIIF",
+        "ppi_violin_validation_t0_TFIIH",
+        "rolling_gini_specificity_t0",
+        "usf_pioneer_ecdf_t0"
+      ];
+
+      // TODO: Fill in ALL cell-type directory names that exist under
+      // https://os134.hpc.ku.dk/deepISA/  (one entry per subdirectory).
+      // Example shown below based on the manifest snippet you shared.
+      const CELL_NAMES = [
+        "B_lymphoblastoid"
+        // "Burkitts_lymphoma",
+        // "T_cell",
+        // ... add the rest of your cell-type directory names here
+      ];
+
+      function buildFallbackManifest() {
+        const themesByModel = {};
+        SHARED_MODELS.forEach((m) => {
+          themesByModel[m] = SHARED_THEMES;
+        });
+
+        const cells = {};
+        CELL_NAMES.forEach((cell) => {
+          cells[cell] = {
+            models: SHARED_MODELS,
+            themes: themesByModel
+          };
+        });
+
+        return { cells };
+      }
 
       // Structural state computed from server directory tree
-      let manifestData = {
-        cells: {}
-      };
+      let manifestData = { cells: {} };
 
       let currentGridCols = 3;
 
-      // 1. Fetch file manifest or index dynamically
+      // 1. Fetch file manifest or index dynamically, falling back to shared embedded data
       async function initData() {
+        let loadedFromManifest = false;
+
         try {
           const res = await fetch(MANIFEST_URL);
           if (res.ok) {
-            manifestData = await res.json();
+            const data = await res.json();
+            if (data && data.cells && Object.keys(data.cells).length > 0) {
+              manifestData = data;
+              loadedFromManifest = true;
+            } else {
+              console.warn("manifest.json loaded but contained no cells. Using fallback data.");
+            }
           } else {
-            console.warn("manifest.json not found. Attempting directory index fallback...");
+            console.warn(`manifest.json not found (status ${res.status}). Using fallback data.`);
           }
         } catch (e) {
-          console.error("Failed to load metadata manifest:", e);
+          console.error("Failed to load metadata manifest. Using fallback data:", e);
         }
+
+        if (!loadedFromManifest) {
+          manifestData = buildFallbackManifest();
+          if (Object.keys(manifestData.cells).length === 0) {
+            console.error(
+              "No cell names configured in CELL_NAMES and manifest.json could not be loaded. " +
+                "Please populate CELL_NAMES in index.html with your cell-type directory names."
+            );
+          }
+        }
+
         populateControls();
         renderView();
       }
@@ -400,6 +478,17 @@
         document.getElementById("cellControls").style.display = viewMode === "cell" ? "block" : "none";
         document.getElementById("reproControls").style.display = viewMode === "repro" ? "block" : "none";
 
+        if (Object.keys(manifestData.cells).length === 0) {
+          main.innerHTML = `
+            <div class="info-box" style="font-size:0.95rem; padding:1rem;">
+              No cell type data is configured. Please populate the <code>CELL_NAMES</code> array in
+              <code>index.html</code>, or ensure <code>manifest.json</code> is reachable at
+              <code>${MANIFEST_URL}</code>.
+            </div>
+          `;
+          return;
+        }
+
         if (viewMode === "cell") {
           renderCellCentric(main, showEmergence);
         } else {
@@ -453,7 +542,7 @@
             const imgPath = `${BASE_PATH}/${cell}/${defaultModel}/Plots/${theme}.png`;
             html += `
               <div class="plot-card">
-                <img src="${imgPath}" alt="${theme}">
+                <img src="${imgPath}" alt="${theme}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><text x=\'10\' y=\'50\' fill=\'red\'>Missing Plot</text></svg>'">
                 <div class="caption">${theme}</div>
               </div>
             `;
@@ -490,7 +579,7 @@
               const imgPath = `${BASE_PATH}/${cell}/${model}/Plots/${selectedTheme}.png`;
               html += `
                 <div class="plot-card">
-                  <img src="${imgPath}" alt="${selectedTheme}">
+                  <img src="${imgPath}" alt="${selectedTheme}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><text x=\'10\' y=\'50\' fill=\'red\'>Missing Plot</text></svg>'">
                   <div class="caption">${model.replace("Analysis_", "").toUpperCase()}</div>
                 </div>
               `;
@@ -506,7 +595,7 @@
             const imgPath = `${BASE_PATH}/${cell}/${defaultModel}/Plots/${selectedTheme}.png`;
             html += `
               <div class="plot-card">
-                <img src="${imgPath}" alt="${selectedTheme}">
+                <img src="${imgPath}" alt="${selectedTheme}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><text x=\'10\' y=\'50\' fill=\'red\'>Missing Plot</text></svg>'">
                 <div class="caption">${cell}</div>
               </div>
             `;
@@ -519,5 +608,9 @@
 
       document.addEventListener("DOMContentLoaded", initData);
     </script>
+
+    <footer class="footer">
+      DeepISA Explorer · TF Cooperativity Atlas
+    </footer>
   </body>
 </html>
